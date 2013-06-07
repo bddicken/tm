@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<!-- Set the title that will show up in browser -->
+	<title>WindowGame</title>
+
+	<!-- Import my js and other libraries -->
+	<script src="../lib/jquery-1.8.2.min.js"></script>
+
+	<!-- import css -->
+	<link id="cssLink" rel="styleSheet" href="../css/main.css"/>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="500" height="500" ></canvas>
+
+    <div id="mainDiv">
+        <div id="relDiv"></div>
+    </div>
+
+    <a href="#" class="button" id="button-replay" type="button" style="display:none;" value="play again?" onclick="init();gameState=1;">play again? </a>
+    <a href="#" class="button" id="button-start" type="button" style="display:inline;" value="start playing" onclick="init();gameState=1;toggleVisible(this);">start playing</a>
+    <a href="#" class="button" id="button-menu" type="button" style="display:none;" value="main menu" onclick="gameState=0;toggleVisible(this);">main menu</a>
+    <a href="#" class="button" id="button-htp" type="button" style="display:inline;" value="how to p[lay" onclick="gameState=0;toggleVisible(document.getElementById('box-instructions'));">how to play</a>
+
+    <div class="box" id="box-instructions"> In this game, you must keep your character (the red square on the screen) from touching any other square that is moving around. Your character always stays in the center of your computer screen. You move it around the map by grabbing to top of the window, and dragging the window around. The longer you play, the more challenging it gets. Good luck!</div>
+
+</body>
+
+<script src="../js/unit.js"></script>
+<script src="../js/enemy.js"></script>
+<script src="../js/player.js"></script>
+<script src="../js/main.js"></script>
+
+</html>

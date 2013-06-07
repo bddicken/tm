@@ -1,0 +1,87 @@
+/* to remove the top and left whitespace */
+* { 
+    margin:0; 
+    padding:0; 
+} 
+
+/* Style for all links */
+a:link {
+    text-decoration: none;
+    color: rgb(60, 60, 60);
+}
+a:active {
+    text-decoration: none;
+    color: rgb(60, 60, 60);
+}
+a:visited {
+    text-decoration: none;
+    color: rgb(60, 60, 60);
+}
+a:hover {
+    text-decoration: none;
+    color: rgb(60, 60, 60);
+}
+
+body {
+    font-family: sans-serif;
+    color: rgb(255, 255, 255);
+    display:block;
+    position:fixed;
+    background-color: #DBDBDB;
+    padding:0px;
+    margin:0px;
+    top:0px;
+    left:0px;
+    bottom:0px;
+    right:0px;
+    overflow:hidden;
+}
+
+#tmCanvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    z-index:1;
+}
+
+.bar {
+    font-family: courier;
+    background: #ABABAB;
+    font-size: 24px;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.title1 {
+    /* background: #9E9E9E; */
+    background: #ABABAB;
+    z-index:10;
+    text-align:center;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.buttons {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.button {
+    margin-left: auto;
+    text-align:center;
+    margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 80px;
+    background: #ABFBAB;
+    z-index:15;
+    font-size:16px;
+}
+
