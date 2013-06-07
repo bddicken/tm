@@ -6,69 +6,103 @@ var ctx;
 var animationHasStarted = false;
 var tmState;
 
+// raphael variable
+var paper;
+var tapeCells = new Array();
+var tapeHead;
+var inputLength = 10;
 
 /* Keep track of the window dimention */
 var winSize = [1000,600];
+var cellSize = [50, 50];
+var headSize = [6, 50];
+
+var animationQueue = [];
 
 function init() {
-    //window.resizeTo(winSize[0],winSize[1]);
-    //$("body").css("overflow", "hidden");
 
-    c=document.getElementById("tmCanvas");
-    ctx=c.getContext("2d");
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    var w = $(window).width(),
-        h = $(window).height();
-    
-    c.width = winSize[0]; c.height = winSize[1];
+    paper = new Raphael(document.getElementById('tmCanvas'), winSize[0], winSize[1]);
 
-    ctx.font="24px Courier New";
-    
-    ctx.clearRect (0,0,winSize[0],winSize[1]);
+    //var circle = paper.circle(100, 100, 80);
 
-    ctx.fillStyle="#BFBFBF";
-    
-    ctx.fillRect(0, 0, winSize[0], winSize[1]);
-    
-    ctx.fillStyle="#F0F000";
+    // Draw machine head
+    tapeHead = paper.rect((winSize[0]/2)-3, 65, headSize[0], headSize[1]);
 
-    ctx.fillRect(   ((screen.width/2) - window.screenX),
-                    ((screen.height/2) - window.screenY),
-                    32,
-                    32);
-    
-    if(!animationHasStarted) {
-        animationHasStarted = true;
-        setInterval(animationLoop,20);
+    // Draw machine cells
+    for(var i=0; i<inputLength;i++) {
+        tapeCells[i] = paper.rect(i*(cellSize[0]), 100, cellSize[0], cellSize[0]);
+        tapeCells[i].attr({
+            stroke: '#ffaf4f',
+            fill: 'blue'
+        });
     }
+
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('L');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('L');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('L');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('L');");
+    animationQueue.push("shiftTape('L');");
+    animationQueue.push("shiftTape('L');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+    animationQueue.push("shiftTape('R');");
+
+    animateTape();
+
 }
 
-var pis = function pointInSquare(x, y, en) {
-    if(en.x < x && x < en.x+en.dimention) {
-        if(en.y < y && y < en.y+en.dimention)
-            return true;
+    function animateTape() {
+        var command = animationQueue.shift();
+        if(command != undefined) {
+           console.log("evalling: " + command);
+           eval(command);
+        }
     }
-    return false;
-}
+    
+    function animateNextOnQueue() {
+        var command = animationQueue.shift();
+        if(command != undefined) {
+           console.log("evalling: " + command);
+           eval(command);
+        }
+    }
+   
+    function shiftTape(direction) {
+        var funcVar = function(){};
+        if(direction == "L") {
+            for(var i=0; i < inputLength;i++) {
+                if(i+1 == inputLength)
+                    funcVar = animateNextOnQueue;
+                tapeCells[i].animate({
+                    x: tapeCells[i].attrs.x-50,
+                    y: tapeCells[i].attrs.y
+                }, 300, '<>', funcVar );
+            }
+        }
+        else if(direction == "R") {
+            for(var i=0; i < inputLength;i++) {
+                if(i+1 == inputLength)
+                    funcVar = animateNextOnQueue;
+                tapeCells[i].animate({
+                    x: tapeCells[i].attrs.x+50,
+                    y: tapeCells[i].attrs.y
+                }, 300, '<>', funcVar );
+            }
+        }
+    } 
 
-function animationLoop() {
-    // Main menu
-    if(tmState == 0) {
-    }
-    // Playing the game
-    else if(tmState == 1) {
-    }
-    // Lost the game
-    else if(tmState == 2) {
-    }
-}
-
-function toggleVisible(v) {
-    if(v.style.display.indexOf("none") != -1) {
-        v.style.display = "inline";
-    }
-    else {
-        v.style.display = "none";
-    }
-}
 
