@@ -1,5 +1,3 @@
-<h2>tm (Turing Machine)<h2>
-
-about
-====================
+## tm (Turing Machine)
 An animation-based turing machine simulator.
+
