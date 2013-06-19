@@ -26,6 +26,42 @@
     </div>
 
     <div id="tmCanvas"></div>
+
+    <span id="definition">
+        <textarea rows="30" cols="70">
+
+; Syntax: <cur state> <cur sym> <new sym> <dir> <new state>
+; ';' starts a comment.
+; '*' is a wildcard
+; '_' represents the blank (space) symbol.
+; Symbols must be a single non-whitespace character.
+; States can be any word, not only numbers.
+;
+; This prog concats a string of '1's to the end of the second.
+
+0 0 0 r 0
+0 1 x r 1
+1 1 1 r 1
+1 0 0 r 2
+2 0 0 r 2
+2 1 1 r 3
+3 1 1 r 3
+3 0 1 l 4
+3 _ 1 l 4
+4 1 1 l 4
+4 0 0 l 5
+5 0 0 l 5
+5 1 1 l 6
+5 x x x halt
+6 1 1 l 6
+6 x x r 0
+6 0 0 r 0
+
+; This is a hack to load an appropriate initial tape. $INITIAL_TAPE: 11110011111"
+        
+        </textarea>
+    </span>
+
 </body>
 
 </html>
