@@ -22,6 +22,10 @@ a:hover {
     color: rgb(60, 60, 60);
 }
 
+#definition {
+    text-align: center;
+}
+
 body {
     font-family: sans-serif;
     color: rgb(255, 255, 255);

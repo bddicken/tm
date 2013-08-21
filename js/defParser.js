@@ -1,6 +1,8 @@
+/** parser */
+var parser = new defParser();
 
 /** The turing machine model */
-var turingModel = new TM();
+var tm = new TM();
 
 /**
  * File parsing object which parses a Turing Machine definition
@@ -24,10 +26,13 @@ function defParser(parseString)
      */
     this.parse = function() {
 
-        var lines = parseString.split("\n").length;  
+        tm = new TM();
+
+        var lines = this.file.split("\n").length;  
 
         var com = this.getLine();
         while(com !== 'F'){
+            console.log("parse")
             this.determineCommand(com);
             com = this.getLine();
             this.line++;
@@ -57,7 +62,8 @@ function defParser(parseString)
         // command is adding an edge
         if(command.indexOf("$INITIAL_TAPE") != -1){
             // Parse command
-            var parse = command.split('');
+            var index = command.indexOf('$INITIAL_TAPE');
+            var parse = command.substring(index+14).split('');
 
             // Populate cells
             for(var x=0; x < parse.length; x++)
@@ -79,15 +85,15 @@ function defParser(parseString)
         }
 
         // command is whitespace
-        else if(cType == '\n' || 
-                cType == ' '  ||
-                cType == ''  ||
-                cType == '\t') {
+        else if(command == '\n' || 
+                command == ' '  ||
+                command == ''  ||
+                command == '\t') {
         }
         
         // else, command is adding a state
         else {
-            try {
+            //try {
                 // Parse command
                 var parse = command.split(' ');
 
@@ -109,12 +115,12 @@ function defParser(parseString)
                 tS.stateSymbol = parse[0];
                 tm.addState(tS);
 
-            } catch(err) {
-                this.error = true;
-                console.log('other error >>>' + cType + '<<<  :::' + command + ':::');
-                this.errorMessage = this.errorMessage.concat(', ' + this.line);
-                return;
-            }
+            //} catch(err) {
+            //    this.error = true;
+            //    console.log('other error >>>' + command + '<<<');
+            //    this.errorMessage = this.errorMessage.concat(', ' + this.line);
+            //    return;
+            //}
         }
     }
 

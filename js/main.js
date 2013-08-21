@@ -41,68 +41,49 @@ function init() {
     animationQueue.push("shiftTape('L');");
     animationQueue.push("shiftTape('R');");
     animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('R');");
     animationQueue.push("shiftTape('L');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('L');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('L');");
-    animationQueue.push("shiftTape('L');");
-    animationQueue.push("shiftTape('L');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('R');");
-    animationQueue.push("shiftTape('R');");
 
     animateTape();
 
 }
 
-    function animateTape() {
-        var command = animationQueue.shift();
-        if(command != undefined) {
-           console.log("evalling: " + command);
-           eval(command);
-        }
+function animateTape() {
+    var command = animationQueue.shift();
+    if(command != undefined) {
+        console.log("evalling: " + command);
+       eval(command);
     }
+}
     
-    function animateNextOnQueue() {
-        var command = animationQueue.shift();
-        if(command != undefined) {
-           console.log("evalling: " + command);
-           eval(command);
+function animateNextOnQueue() {
+    var command = animationQueue.shift();
+    if(command != undefined) {
+        console.log("evalling: " + command);
+        eval(command);
+    }
+}
+   
+function shiftTape(direction) {
+    var funcVar = function(){};
+    if(direction == "L") {
+        for(var i=0; i < inputLength;i++) {
+            if(i+1 == inputLength)
+                funcVar = animateNextOnQueue;
+            tapeCells[i].animate({
+                x: tapeCells[i].attrs.x-50,
+                y: tapeCells[i].attrs.y
+            }, 300, '<>', funcVar );
         }
     }
-   
-    function shiftTape(direction) {
-        var funcVar = function(){};
-        if(direction == "L") {
-            for(var i=0; i < inputLength;i++) {
-                if(i+1 == inputLength)
-                    funcVar = animateNextOnQueue;
-                tapeCells[i].animate({
-                    x: tapeCells[i].attrs.x-50,
-                    y: tapeCells[i].attrs.y
-                }, 300, '<>', funcVar );
-            }
+    else if(direction == "R") {
+        for(var i=0; i < inputLength;i++) {
+            if(i+1 == inputLength)
+                funcVar = animateNextOnQueue;
+            tapeCells[i].animate({
+                x: tapeCells[i].attrs.x+50,
+                y: tapeCells[i].attrs.y
+            }, 300, '<>', funcVar );
         }
-        else if(direction == "R") {
-            for(var i=0; i < inputLength;i++) {
-                if(i+1 == inputLength)
-                    funcVar = animateNextOnQueue;
-                tapeCells[i].animate({
-                    x: tapeCells[i].attrs.x+50,
-                    y: tapeCells[i].attrs.y
-                }, 300, '<>', funcVar );
-            }
-        }
-    } 
-
+    }
+} 
 

@@ -10,17 +10,17 @@ function TM() {
     // An array of states
     this.states = new Array();
 
-    this.addState(s) = function() {
-        states[s.stateSymbol] = s;
+    this.addState = function(s) {
+        this.states[s.stateSymbol] = s;
     }
 
-    this.getState(stateSym) = function() {
-        retun states[stateSym];
+    this.getState = function(stateSym) {
+        return this.states[stateSym];
     }
 
-    this.step() = function() {
+    this.step = function() {
 
-        var cr = currentState.rules[inputTape[currentCell]];
+        var cr = this.currentState.rules[inputTape[currentCell]];
 
         // Update current character
         inputTape[currentCell] = cr.newSymbol;
@@ -43,8 +43,8 @@ function TM() {
 function State(stateStm) {
     this.stateSymbol = null;
     this.rules = new Array();
-    this.addRule(sym, r) = function() {
-        rules[sym] = r;
+    this.addRule = function(sym, r) {
+        this.rules[sym] = r;
     }
 }
 

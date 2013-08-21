@@ -10,6 +10,8 @@
     <script src="lib/jquery-1.8.2.min.js"></script>
     <script src="lib/raphael-min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/tm.js"></script>
+    <script src="js/defParser.js"></script>
 
     <!-- import css -->
     <link id="cssLink" rel="styleSheet" href="css/main.css"/> 
@@ -17,27 +19,29 @@
 
 <body>
     <div class="bar">
-        <span class="title1">Turing Machine v0.0</span>
+        <span class="title1">Turing Machine</span>
         <span class="buttons">
+            <!--
             <a href="#" class="button">definition</a>
             <a href="#" class="button">color</a>
             <a href="#" class="button">control</a>
+            -->
         </span>
     </div>
 
     <div id="tmCanvas"></div>
 
-    <span id="definition">
-        <textarea rows="30" cols="70">
+    <div id="definition">
+        <textarea id="deftextbox" rows="10" cols="70">
 
-; Syntax: <cur state> <cur sym> <new sym> <dir> <new state>
-; ';' starts a comment.
-; '*' is a wildcard
-; '_' represents the blank (space) symbol.
-; Symbols must be a single non-whitespace character.
-; States can be any word, not only numbers.
-;
-; This prog concats a string of '1's to the end of the second.
+# Syntax: <cur state> <cur sym> <new sym> <dir> <new state>
+# '#' starts a comment.
+# '*' is a wildcard
+# '_' represents the blank (space) symbol.
+# Symbols must be a single non-whitespace character.
+# States can be any word, not only numbers.
+#
+# This prog concats a string of '1's to the end of the second.
 
 0 0 0 r 0
 0 1 x r 1
@@ -57,10 +61,16 @@
 6 x x r 0
 6 0 0 r 0
 
-; This is a hack to load an appropriate initial tape. $INITIAL_TAPE: 11110011111"
+$INITIAL_TAPE 11110011111"
+
+F
         
         </textarea>
-    </span>
+    </div>
+
+    <a href="#go"><div align="center" class="button1" onclick="parser.file = (document.getElementById('deftextbox').value); parser.parse();">run program</div></a>
+
+    <div id="popup" align="center"> </div>
 
 </body>
 
