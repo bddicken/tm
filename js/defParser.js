@@ -12,7 +12,7 @@ var tm = new TM();
 
 function defParser(parseString) 
 {
-    this.file = parseString + '\n';
+    this.file = parseString + '\n' + '\n';
     this.error = false;
     this.errorMessage = "Errors found on line(s)";
     this.okMessage = "No errors found";
@@ -32,14 +32,15 @@ function defParser(parseString)
 
         var com = this.getLine();
         while(com !== 'F'){
-            console.log("parse")
+            console.log("parse: " + com);
             this.determineCommand(com);
             com = this.getLine();
             this.line++;
         }
 
+       /*
         var pAlert = document.getElementById('parseStatus');
-        
+       
         if(this.error || this.line < lines) {
             pAlert.style.color = "rgb(150, 20, 20)";
             pAlert.innerHTML = this.errorMessage;
@@ -47,6 +48,10 @@ function defParser(parseString)
             pAlert.style.color = "rgb(120, 220, 120)";
             pAlert.innerHTML = this.okMessage;
         }
+        */
+
+        /* Run animation based off of the model */
+        animate(tm);
     }
 
     /**
@@ -57,7 +62,6 @@ function defParser(parseString)
      * that contain errors are kept track of.
      */
     this.determineCommand = function(command) {
-        //var cType = command.charAt(0);
         
         // command is adding an edge
         if(command.indexOf("$INITIAL_TAPE") != -1){
@@ -68,6 +72,19 @@ function defParser(parseString)
             // Populate cells
             for(var x=0; x < parse.length; x++)
                 tm.inputTape[x] = parse[x];
+
+            return;
+        } 
+        
+        /* initial state of the TM */
+        if(command.indexOf("$INITIAL_STATE") != -1){
+            // Parse command
+            var index = command.indexOf('$INITIAL_STATE');
+            var parse = command.substring(index+15);
+            console.log(index);
+            console.log(parse);
+
+            tm.currentState = tm.states[parse];
 
             return;
         } 
@@ -94,23 +111,30 @@ function defParser(parseString)
         // else, command is adding a state
         else {
             //try {
-                // Parse command
+                /* Parse command */
                 var parse = command.split(' ');
 
-                // Get next state
+                /* Get next state */
                 var nextState = null
                 if(tm.getState(parse[4]) == null)
                     nextState = new State();
                 else 
                     nextState = tm.getState(parse[4]);
                
-                // create new rule
+                /* create new rule */
                 var tR = new Rule();
                 tR.direction = parse[3];
-                tR.nextState = nextState;
+                tR.nextState = parse[4]; //nextState;
                 tR.newSymbol = parse[2];
+              
+                var tS;
+                if( tm.getState(parse[0]) == null || tm.getState(parse[0]) == undefined ) {
+                    tS = new State();
+                } 
+                else {
+                    tS = tm.getState(parse[0]);
+                }
                 
-                var tS = new State();
                 tS.addRule(parse[1], tR);
                 tS.stateSymbol = parse[0];
                 tm.addState(tS);
