@@ -1,3 +1,6 @@
+/* Constants */
+var END_SEQUENCE = 'FFF';
+
 /** parser */
 var parser = new defParser();
 
@@ -12,7 +15,7 @@ var tm = new TM();
 
 function defParser(parseString) 
 {
-    this.file = parseString + '\n' + '\n';
+    this.file = parseString; 
     this.error = false;
     this.errorMessage = "Errors found on line(s)";
     this.okMessage = "No errors found";
@@ -28,10 +31,13 @@ function defParser(parseString)
 
         tm = new TM();
 
+        this.file = this.file + '\nFFF\n';
+
         var lines = this.file.split("\n").length;  
 
         var com = this.getLine();
-        while(com !== 'F'){
+        
+        while(com.indexOf(END_SEQUENCE) == -1){
             console.log("parse: " + com);
             this.determineCommand(com);
             com = this.getLine();
@@ -63,32 +69,6 @@ function defParser(parseString)
      */
     this.determineCommand = function(command) {
         
-        // command is adding an edge
-        if(command.indexOf("$INITIAL_TAPE") != -1){
-            // Parse command
-            var index = command.indexOf('$INITIAL_TAPE');
-            var parse = command.substring(index+14).split('');
-
-            // Populate cells
-            for(var x=0; x < parse.length; x++)
-                tm.inputTape[x] = parse[x];
-
-            return;
-        } 
-        
-        /* initial state of the TM */
-        if(command.indexOf("$INITIAL_STATE") != -1){
-            // Parse command
-            var index = command.indexOf('$INITIAL_STATE');
-            var parse = command.substring(index+15);
-            console.log(index);
-            console.log(parse);
-
-            tm.currentState = tm.states[parse];
-
-            return;
-        } 
-        
         // command is adding a comment
         if(command.indexOf("#") != -1){
             try {
@@ -99,16 +79,36 @@ function defParser(parseString)
                 this.errorMessage = this.errorMessage.concat(', ' + this.line);
                 return;
             }
+            return;
         }
+        
+        /* command is setting initial tape */
+        if(command.indexOf("$INITIAL_TAPE") != -1){
+            var index = command.indexOf('$INITIAL_TAPE');
+            var parse = command.substring(index+14).split('');
+            for(var x=0; x < parse.length; x++)
+                tm.inputTape[x] = parse[x];
+            return;
+        } 
+        
+        /* initial state of the TM */
+        if(command.indexOf("$INITIAL_STATE") != -1){
+            var index = command.indexOf('$INITIAL_STATE');
+            var parse = command.substring(index+15);
+            console.log(index);
+            console.log(parse);
+            tm.currentState = tm.states[parse];
+            return;
+        } 
 
-        // command is whitespace
+        /* command is whitespace */
         else if(command == '\n' || 
                 command == ' '  ||
                 command == ''  ||
                 command == '\t') {
         }
         
-        // else, command is adding a state
+        /* else, command is adding a state */
         else {
             //try {
                 /* Parse command */
@@ -124,7 +124,7 @@ function defParser(parseString)
                 /* create new rule */
                 var tR = new Rule();
                 tR.direction = parse[3];
-                tR.nextState = parse[4]; //nextState;
+                tR.nextState = parse[4];
                 tR.newSymbol = parse[2];
               
                 var tS;

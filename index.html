@@ -34,14 +34,19 @@
     <div id="definition">
         <textarea id="deftextbox" rows="10" cols="70">
 
+#
 # Syntax: <cur state> <cur sym> <new sym> <dir> <new state>
+#
 # '#' starts a comment.
 # '*' is a wildcard
 # '_' represents the blank (space) symbol.
+#
 # Symbols must be a single non-whitespace character.
 # States can be any word, not only numbers.
 #
-# This prog concats a string of '1's to the end of the second.
+# $INITIAL_TAPE is required to be set
+# $INITIAL_STATE is required to be set
+#
 
 0 0 0 r 0
 0 1 x r 1
@@ -63,8 +68,6 @@
 
 $INITIAL_TAPE 11110011111
 $INITIAL_STATE 0
-
-F
         
         </textarea>
     </div>

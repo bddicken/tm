@@ -26,12 +26,22 @@ a:hover {
     text-align: center;
 }
 
+#deftextbox {
+    width: 800px;
+    height: 300px;
+    color: #000000;
+    background-color: rgb(200, 200, 200);
+    border-style:solid;
+    border-width:2px;
+    border-color: orange;
+}
+
 body {
+    background-color:rgb(100, 100, 100);
     font-family: sans-serif;
     color: rgb(255, 255, 255);
     display:block;
     position:fixed;
-    background-color: #DBDBDB;
     padding:0px;
     margin:0px;
     top:0px;
@@ -42,12 +52,19 @@ body {
 }
 
 #tmCanvas {
+    width: 800px;
     padding-left: 0;
     padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left:auto;
+    margin-right:auto;
     display: block;
+    border: 2px solid orange;
     z-index:1;
+    background-color: rgb(200, 200, 200);
 }
 
 .bar {
@@ -58,11 +75,10 @@ body {
     padding-right: 0;
     margin-left: auto;
     margin-right: auto;
+    background-color: rgb(50, 50, 50);
 }
 
 .title1 {
-    /* background: #9E9E9E; */
-    background: #ABABAB;
     z-index:10;
     text-align:center;
     padding-left: 0;
@@ -87,5 +103,8 @@ body {
     background: #ABFBAB;
     z-index:15;
     font-size:16px;
+}
+.button1 {
+    color:#FFFFFF;
 }
 

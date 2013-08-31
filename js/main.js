@@ -2,7 +2,8 @@
 window.onload = init;
 
 /* misc constants */
-STEP_TIME = 200;
+STEP_TIME = 150;
+HEAD_TIME = 40;
 
 
 var c;
@@ -18,7 +19,7 @@ var tapeHead;
 var inputLength = 10;
 
 /* Keep track of the window dimention */
-var winSize = [1000,200];
+var winSize = [800,120];
 var cellSize = [50, 50];
 var headSize = [6, 50];
 
@@ -34,12 +35,12 @@ function animate(machine) {
     
     paper = new Raphael(document.getElementById('tmCanvas'), winSize[0], winSize[1]);
     
-    tapeHead = paper.rect(175, 65, headSize[0], headSize[1]);
-
     machine.saveStartTape();
     buildAnimationQueue(machine);
     inputLength = machine.inputTape.length;
     drawCells(machine);
+    tapeHead = paper.rect(175, 15, headSize[0], headSize[1]);
+    tapeHead.attr({ color: '#000000' });
     animateTape();
 
 }
@@ -103,10 +104,12 @@ function shiftTape(direction, sym, index) {
         fill: '#FFFFFF'
     });
     
+    /* Head animation */
+
     if(direction == "L") {
         for(var i=0; i < inputLength;i++) {
             if(i+1 == inputLength)
-                funcVar = animateNextOnQueue;
+                funcVar = animateTapeHead;
             tapeCells[i].animate({
                 x: tapeCells[i].attrs.x+50,
                 y: tapeCells[i].attrs.y
@@ -120,7 +123,7 @@ function shiftTape(direction, sym, index) {
     else if(direction == "R") {
         for(var i=0; i < inputLength;i++) {
             if(i+1 == inputLength)
-                funcVar = animateNextOnQueue;
+                funcVar = animateTapeHead;
             tapeCells[i].animate({
                 x: tapeCells[i].attrs.x-50,
                 y: tapeCells[i].attrs.y
@@ -141,14 +144,14 @@ function  drawCells(machine) {
     for(var i=0; i<machine.startTape.length;i++) {
 
         /* Create a cell */
-        tapeCells[i] = paper.rect(150+i*(cellSize[0]), 100, cellSize[0], cellSize[0]);
+        tapeCells[i] = paper.rect(150+i*(cellSize[0]), 50, cellSize[0], cellSize[0]);
         tapeCells[i].attr({
             stroke: '#ffaf4f',
             fill: 'grey'
         });
 
         /* Set the character on the cell */
-        tapeChars[i] = paper.text(150+i*(cellSize[0])+20, 100+20, machine.startTape[i]);
+        tapeChars[i] = paper.text(150+i*(cellSize[0])+25, 50+25, machine.startTape[i]);
         tapeChars[i].attr({
             'font-size': '20px',
             color: '#FFFFFF',
@@ -156,5 +159,20 @@ function  drawCells(machine) {
         });
     }
 }
+function animateTapeHead() {
+    tapeHeadDown();
+}
 
+function tapeHeadUp () {
+    tapeHead.animate({
+        x: tapeHead.attrs.x,
+        y: tapeHead.attrs.y-15
+    }, HEAD_TIME, '<>', animateNextOnQueue );
+}
 
+function tapeHeadDown () {
+    tapeHead.animate({
+        x: tapeHead.attrs.x,
+        y: tapeHead.attrs.y+15
+    }, HEAD_TIME, '<>', tapeHeadUp );
+}
