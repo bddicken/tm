@@ -12,6 +12,7 @@
     <script src="js/main.js"></script>
     <script src="js/tm.js"></script>
     <script src="js/defParser.js"></script>
+    <script src="js/popup.js"></script>
 
     <!-- import css -->
     <link id="cssLink" rel="styleSheet" href="css/main.css"/> 
@@ -21,8 +22,8 @@
     <div class="bar">
         <span class="title1">Turing Machine</span>
         <span class="buttons">
+            <a href="#" onclick="helpPop.flip()" class="button">help</a>
             <!--
-            <a href="#" class="button">definition</a>
             <a href="#" class="button">color</a>
             <a href="#" class="button">control</a>
             -->
@@ -87,7 +88,9 @@ $INITIAL_STATE 0
 
     </div>
 
-    <div id="popup" align="center"> </div>
+    <div id="help" class="popup"  align="center"> 
+        Nothing here yet :(
+    </div>
 
 </body>
 

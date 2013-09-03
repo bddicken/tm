@@ -39,6 +39,7 @@ a:hover {
 body {
     background-color:rgb(100, 100, 100);
     font-family: sans-serif;
+    font-family: courier;
     color: rgb(255, 255, 255);
     display:block;
     position:fixed;
@@ -68,11 +69,10 @@ body {
 }
 
 .bar {
-    font-family: courier;
     background: #ABABAB;
     font-size: 24px;
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 10px;
+    padding-right: 10px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom:0px;
@@ -95,7 +95,9 @@ body {
 }
 
 .button {
-    margin-left: auto;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 2px;
     text-align:center;
     margin-left: 10px;
     padding-left: 10px;
@@ -104,6 +106,7 @@ body {
     background: #ABFBAB;
     z-index:15;
     font-size:16px;
+    background-color:orange;
 }
 .button1 {
     border-radius:3px;
@@ -120,4 +123,25 @@ body {
     width:800px;
     margin-left:auto;
     margin-right:auto;
+}
+.popup {
+    overflow-y:scroll;
+    width: 600px;
+    height: 400px;
+    color: #000000;
+    background-color: rgb(200, 200, 200);
+    border-style:solid;
+    border-width:2px;
+    border-color: orange;
+    margin:0px;
+    position:fixed;
+    text-align:center;
+    margin-left:-300px;
+    margin-top:-200px;
+    left:50%;
+    right:50%;
+    top:50%;
+    box-shadow: 0px 0px 45px #000000;
+    padding:20px;
+    visibility:hidden;
 }
