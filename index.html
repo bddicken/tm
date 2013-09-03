@@ -29,10 +29,21 @@
         </span>
     </div>
 
-    <div id="tmCanvas"></div>
+    <div id="main">
 
-    <div id="definition">
-        <textarea id="deftextbox" rows="10" cols="70">
+        </br>
+        </br>
+
+        <div class="bar">
+            <span class="title1">Visualizer</span>
+        </div>
+        <div id="tmCanvas"></div>
+
+        <div class="bar">
+            <span class="title1">Program</span>
+        </div>
+        <div id="definition">
+            <textarea id="deftextbox" rows="10" cols="70">
 
 #
 # Syntax: <cur state> <cur sym> <new sym> <dir> <new state>
@@ -69,10 +80,12 @@
 $INITIAL_TAPE 11110011111
 $INITIAL_STATE 0
         
-        </textarea>
-    </div>
+            </textarea>
+        </div>
 
-    <a href="#go"><div align="center" class="button1" onclick="parser.file = (document.getElementById('deftextbox').value); parser.parse();">run program</div></a>
+    <a align="center" href="#go"><div align="center" class="button1" onclick="parser.file = (document.getElementById('deftextbox').value); parser.parse();">run program</div></a>
+
+    </div>
 
     <div id="popup" align="center"> </div>
 

@@ -57,7 +57,7 @@ body {
     padding-right: 0;
     margin-left: 50px;
     margin-right: 50px;
-    margin-top: 20px;
+    /*margin-top: 20px;*/
     margin-bottom: 20px;
     margin-left:auto;
     margin-right:auto;
@@ -75,6 +75,7 @@ body {
     padding-right: 0;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom:0px;
     background-color: rgb(50, 50, 50);
 }
 
@@ -105,6 +106,18 @@ body {
     font-size:16px;
 }
 .button1 {
+    border-radius:3px;
+    min-width:50px;
+    max-width:250px;
+    padding:8px;
+    background-color: rgb(50, 50, 50);
+    text-align:center;
     color:#FFFFFF;
+    margin-left:auto;
+    margin-right:auto;
 }
-
+#main {
+    width:800px;
+    margin-left:auto;
+    margin-right:auto;
+}
