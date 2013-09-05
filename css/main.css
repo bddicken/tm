@@ -23,17 +23,12 @@ a:hover {
 }
 
 #definition {
-    text-align: center;
+    width: 390px;
 }
 
 #deftextbox {
-    width: 800px;
-    height: 300px;
-    color: #000000;
-    background-color: rgb(200, 200, 200);
-    border-style:solid;
-    border-width:2px;
-    border-color: orange;
+    height: 400px;
+    width: 390px;
 }
 
 body {
@@ -52,20 +47,32 @@ body {
     overflow:hidden;
 }
 
-#tmCanvas {
-    width: 800px;
+#tape {
+    float: right;
+    width:390px;
+}
+
+#finalTape {
+    padding:15px;
+    font-size:15px;
+    vertical-align:center;
+    overflow-x:scroll;
+}
+
+.box {
     padding-left: 0;
     padding-right: 0;
-    margin-left: 50px;
-    margin-right: 50px;
-    /*margin-top: 20px;*/
+    background-color: rgb(200, 200, 200);
+    border: 2px solid orange;
+    display: block;
+    color: #000000;
+}
+
+#tmCanvas {
+    width: 800px;
     margin-bottom: 20px;
     margin-left:auto;
     margin-right:auto;
-    display: block;
-    border: 2px solid orange;
-    z-index:1;
-    background-color: rgb(200, 200, 200);
 }
 
 .bar {
@@ -116,6 +123,7 @@ body {
     background-color: rgb(50, 50, 50);
     text-align:center;
     color:#FFFFFF;
+    margin-top:20px;
     margin-left:auto;
     margin-right:auto;
 }
@@ -128,9 +136,6 @@ body {
     overflow-y:scroll;
     width: 600px;
     min-height: 30px;
-    /*
-    height: 400px;
-    */
     color: #000000;
     background-color: rgb(200, 200, 200);
     border-style:solid;

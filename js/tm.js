@@ -1,18 +1,26 @@
 
 function TM() {
 	
-    // An array of characters
+    /* An array of characters */
     this.inputTape = new Array();
     this.startTape = new Array();
 
     this.currentCell = 0;
     this.currentState = null;
 
-    // An array of states
+    /* An array of states */
     this.states = new Array();
 
     this.addState = function(s) {
         this.states[s.stateSymbol] = s;
+    }
+
+    this.getFinalTape = function() {
+        try {
+            return tm.inputTape.toString().replace(/,/g, "");
+        } catch(err) {
+            return "N/A";
+        }
     }
 
     this.getState = function(stateSym) {
@@ -65,14 +73,3 @@ function Rule(d, nState, nSym) {
     this.newSymbol = nSym;      // A char
 }
 
-/**
- * clone an object
- */
-function clone(obj){
-    if(obj == null || typeof(obj) != 'object')
-        return obj;
-    var temp = obj.constructor(); 
-    for(var key in obj)
-        temp[key] = clone(obj[key]);
-    return temp;
-}

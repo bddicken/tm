@@ -30,13 +30,22 @@ function init() {
 }
 
 function animate(machine) {
-   
+  
+    /* Re-init objects */
+    /*
     paper.remove();
-    
     paper = new Raphael(document.getElementById('tmCanvas'), winSize[0], winSize[1]);
-    
+    tapeCells = [];
+    tapeChars = [];
+    animationQueue = [];
+    parser = new defParser();
+    tm = new TM();
+    */
+
     machine.saveStartTape();
     var build = buildAnimationQueue(machine);
+
+    document.getElementById('finalTape').innerHTML = machine.getFinalTape();
     
     if(build) {
         inputLength = machine.inputTape.length;
@@ -51,6 +60,7 @@ function animate(machine) {
 function buildAnimationQueue(machine) {
     try {
         while(true) {
+        
             /* begin debug */
             /*
             console.log("---");
@@ -69,7 +79,6 @@ function buildAnimationQueue(machine) {
             else {
                 machine.appendSpace();
                 r = machine.currentState.rules[machine.inputTape[machine.currentCell]];
-                console.log("-new-");
             }
             c = r.newSymbol;
             d = r.direction;
@@ -84,7 +93,6 @@ function buildAnimationQueue(machine) {
         }
     } catch(err) {
         tmERRPop.flip();
-        console.log("tmERR");
         return false;
     }
     return true;
@@ -114,8 +122,6 @@ function shiftTape(direction, sym, index) {
         color: '#FFFFFF',
         fill: '#FFFFFF'
     });
-    
-    /* Head animation */
 
     if(direction == "L") {
         for(var i=0; i < inputLength;i++) {
@@ -170,6 +176,7 @@ function  drawCells(machine) {
         });
     }
 }
+
 function animateTapeHead() {
     tapeHeadDown();
 }
@@ -186,4 +193,16 @@ function tapeHeadDown () {
         x: tapeHead.attrs.x,
         y: tapeHead.attrs.y+15
     }, HEAD_TIME, '<>', tapeHeadUp );
+}
+
+/**
+ * clone an object
+ */
+function clone(obj){
+    if(obj == null || typeof(obj) != 'object')
+        return obj;
+    var temp = obj.constructor(); 
+    for(var key in obj)
+        temp[key] = clone(obj[key]);
+    return temp;
 }
