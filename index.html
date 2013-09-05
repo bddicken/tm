@@ -9,10 +9,10 @@
     <!-- Import my js and other libraries -->
     <script src="lib/jquery-1.8.2.min.js"></script>
     <script src="lib/raphael-min.js"></script>
+    <script src="js/popup.js"></script>
     <script src="js/main.js"></script>
     <script src="js/tm.js"></script>
     <script src="js/defParser.js"></script>
-    <script src="js/popup.js"></script>
 
     <!-- import css -->
     <link id="cssLink" rel="styleSheet" href="css/main.css"/> 
@@ -88,8 +88,16 @@ $INITIAL_STATE 0
 
     </div>
 
-    <div id="help" class="popup"  align="center"> 
+    <div id="help" onclick="helpPop.flip()" class="popup" align="center"> 
         Nothing here yet :(
+    </div>
+    
+    <div id="parseERR" onclick="parseERRPop.flip()" class="popup"  align="center"> 
+        Parse error.
+    </div>
+
+    <div id="tmERR" onclick="tmERRPop.flip()" class="popup"  align="center"> 
+        There is an error with your turing machine.
     </div>
 
 </body>

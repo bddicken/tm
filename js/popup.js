@@ -32,4 +32,6 @@ function Popup(pname) {
 /**
  * Create initial popups
  */
-var helpPop = new Popup('help');
+var     helpPop = new Popup('help');
+var parseERRPop = new Popup('parseERR');
+var    tmERRPop = new Popup('tmERR');

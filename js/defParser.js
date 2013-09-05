@@ -29,35 +29,26 @@ function defParser(parseString)
      */
     this.parse = function() {
 
-        tm = new TM();
+        try {
 
-        this.file = this.file + '\nFFF\n';
-
-        var lines = this.file.split("\n").length;  
-
-        var com = this.getLine();
+            tm = new TM();
+            this.file = this.file + '\nFFF\n';
+            var lines = this.file.split("\n").length;  
+            var com = this.getLine();
         
-        while(com.indexOf(END_SEQUENCE) == -1){
-            console.log("parse: " + com);
-            this.determineCommand(com);
-            com = this.getLine();
-            this.line++;
-        }
+            while(com.indexOf(END_SEQUENCE) == -1){
+                console.log("parse: " + com);
+                this.determineCommand(com);
+                com = this.getLine();
+                this.line++;
+            }
 
-       /*
-        var pAlert = document.getElementById('parseStatus');
-       
-        if(this.error || this.line < lines) {
-            pAlert.style.color = "rgb(150, 20, 20)";
-            pAlert.innerHTML = this.errorMessage;
-        } else  {
-            pAlert.style.color = "rgb(120, 220, 120)";
-            pAlert.innerHTML = this.okMessage;
-        }
-        */
+            /* Run animation based off of the model */
+            animate(tm);
 
-        /* Run animation based off of the model */
-        animate(tm);
+        } catch(err) {
+            parseERRPop.flip();
+        }
     }
 
     /**

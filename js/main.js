@@ -36,47 +36,58 @@ function animate(machine) {
     paper = new Raphael(document.getElementById('tmCanvas'), winSize[0], winSize[1]);
     
     machine.saveStartTape();
-    buildAnimationQueue(machine);
-    inputLength = machine.inputTape.length;
-    drawCells(machine);
-    tapeHead = paper.rect(175, 15, headSize[0], headSize[1]);
-    tapeHead.attr({ color: '#000000' });
-    animateTape();
+    var build = buildAnimationQueue(machine);
+    
+    if(build) {
+        inputLength = machine.inputTape.length;
+        drawCells(machine);
+        tapeHead = paper.rect(175, 15, headSize[0], headSize[1]);
+        tapeHead.attr({ color: '#000000' });
+        animateTape();
+    }
 
 }
 
 function buildAnimationQueue(machine) {
-    while(true) {
+    try {
+        while(true) {
+            /* begin debug */
+            /*
+            console.log("---");
+            console.log("main current cell:" + machine.currentCell);
+            console.log("current tape symbol:" + machine.inputTape[machine.currentCell]);
+            console.log("current state:" + machine.currentState.stateSymbol);
+            var r = machine.currentState.rules.length;
+            console.log("number of rules: " + r );
+            console.log("---");
+            */
+            /* end debug */
         
-        /* begin debug */
-        console.log("---");
-        console.log("main current cell:" + machine.currentCell);
-        console.log("current tape symbol:" + machine.inputTape[machine.currentCell]);
-        console.log("current state:" + machine.currentState.stateSymbol);
-        var r = machine.currentState.rules.length;
-        console.log("number of rules: " + r );
-        console.log("---");
-        /* end debug */
-        
-        var d, c;
-        var r = machine.currentState.rules[machine.inputTape[machine.currentCell]];
-        if(r) { }
-        else {
-            machine.appendSpace();
-            r = machine.currentState.rules[machine.inputTape[machine.currentCell]];
-            console.log("-new-");
+            var d, c;
+            var r = machine.currentState.rules[machine.inputTape[machine.currentCell]];
+            if(r) { }
+            else {
+                machine.appendSpace();
+                r = machine.currentState.rules[machine.inputTape[machine.currentCell]];
+                console.log("-new-");
+            }
+            c = r.newSymbol;
+            d = r.direction;
+
+            animCall = "shiftTape('" + d.toUpperCase() + "', '" + c + "', " + machine.currentCell + ");"
+            animationQueue.push(animCall);
+
+            if(r.nextState == 'halt')
+                break;
+    
+            machine.step();
         }
-        c = r.newSymbol;
-        d = r.direction;
-
-        animCall = "shiftTape('" + d.toUpperCase() + "', '" + c + "', " + machine.currentCell + ");"
-        animationQueue.push(animCall);
-
-        if(r.nextState == 'halt')
-            break;
-
-        machine.step();
+    } catch(err) {
+        tmERRPop.flip();
+        console.log("tmERR");
+        return false;
     }
+    return true;
 }
 
 function animateTape() {
