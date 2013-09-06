@@ -23,24 +23,32 @@ var winSize = [800,120];
 var cellSize = [50, 50];
 var headSize = [6, 50];
 
+/* Queue of animation events*/
 var animationQueue = [];
+
+/* Binary semaphore for animation execution 
+ *
+ *  1 = not animating
+ *  0 = closing current animation
+ * -1 = currently animating
+ *
+ */
+var animationSem = 1;
 
 function init() {
     paper = new Raphael(document.getElementById('tmCanvas'), winSize[0], winSize[1]);
 }
 
 function animate(machine) {
-  
-    /* Re-init objects */
-    /*
-    paper.remove();
-    paper = new Raphael(document.getElementById('tmCanvas'), winSize[0], winSize[1]);
-    tapeCells = [];
-    tapeChars = [];
-    animationQueue = [];
-    parser = new defParser();
-    tm = new TM();
-    */
+ 
+    /* Busy wait for animatior to be ready */
+    if(animationSem == -1 || animationSem == 0) {
+        animationSem = 0;
+        return;
+    }
+
+    /* grab semaphore on animatior and begin animation */
+    animationSem = -1;
 
     machine.saveStartTape();
     var build = buildAnimationQueue(machine);
@@ -74,22 +82,23 @@ function buildAnimationQueue(machine) {
             /* end debug */
         
             var d, c;
-            var r = machine.currentState.rules[machine.inputTape[machine.currentCell]];
+            var r = tm.currentState.rules[tm.inputTape[tm.currentCell]];
             if(r) { }
             else {
-                machine.appendSpace();
-                r = machine.currentState.rules[machine.inputTape[machine.currentCell]];
+                tm.appendSpace();
+                r = tm.currentState.rules[tm.inputTape[tm.currentCell]];
             }
+            
             c = r.newSymbol;
             d = r.direction;
 
-            animCall = "shiftTape('" + d.toUpperCase() + "', '" + c + "', " + machine.currentCell + ");"
+            animCall = "shiftTape('" + d.toUpperCase() + "', '" + c + "', " + tm.currentCell + ");"
             animationQueue.push(animCall);
 
             if(r.nextState == 'halt')
                 break;
     
-            machine.step();
+            tm.step();
         }
     } catch(err) {
         tmERRPop.flip();
@@ -99,14 +108,33 @@ function buildAnimationQueue(machine) {
 }
 
 function animateTape() {
-    animateNextOnQueue();
-}
-    
-function animateNextOnQueue() {
     var command = animationQueue.shift();
-    if(command != undefined) {
+  
+    /* Animation queue empty, set semaphore to 0 so that the 
+     * animateTape function knows to reset.
+     */
+    if(command == undefined) {
+        animationSem == 0;
+    }
+
+    /* continue animating */
+    if(command != undefined && animationSem == -1) {
         console.log("evalling: " + command);
         eval(command);
+    } 
+    
+    /* Stop animation */
+    else if (animationSem == 0) {
+        paper.remove();
+        paper = new Raphael(document.getElementById('tmCanvas'), winSize[0], winSize[1]);
+        tapeCells = [];
+        tapeChars = [];
+        animationQueue = [];
+        parser = new defParser();
+        tm = new TM();
+
+        /* Animation is now cleared. Ready to start a new one. */
+        animationSem = 1;
     }
 }
    
@@ -185,7 +213,7 @@ function tapeHeadUp () {
     tapeHead.animate({
         x: tapeHead.attrs.x,
         y: tapeHead.attrs.y-15
-    }, HEAD_TIME, '<>', animateNextOnQueue );
+    }, HEAD_TIME, '<>', animateTape );
 }
 
 function tapeHeadDown () {

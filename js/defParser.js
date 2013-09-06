@@ -101,7 +101,6 @@ function defParser(parseString)
         
         /* else, command is adding a state */
         else {
-            //try {
                 /* Parse command */
                 var parse = command.split(' ');
 
@@ -129,13 +128,6 @@ function defParser(parseString)
                 tS.addRule(parse[1], tR);
                 tS.stateSymbol = parse[0];
                 tm.addState(tS);
-
-            //} catch(err) {
-            //    this.error = true;
-            //    console.log('other error >>>' + command + '<<<');
-            //    this.errorMessage = this.errorMessage.concat(', ' + this.line);
-            //    return;
-            //}
         }
     }
 
