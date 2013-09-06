@@ -5,7 +5,6 @@ window.onload = init;
 STEP_TIME = 150;
 HEAD_TIME = 40;
 
-
 var c;
 var ctx;
 var animationHasStarted = false;
@@ -26,7 +25,7 @@ var headSize = [6, 50];
 /* Queue of animation events*/
 var animationQueue = [];
 
-/* Binary semaphore for animation execution 
+/* Ternary semaphore for animation execution 
  *
  *  1 = not animating
  *  0 = closing current animation
@@ -41,7 +40,7 @@ function init() {
 
 function animate(machine) {
  
-    /* Busy wait for animatior to be ready */
+    /* If currently animating, stop animation */
     if(animationSem == -1 || animationSem == 0) {
         animationSem = 0;
         return;
@@ -51,6 +50,8 @@ function animate(machine) {
     animationSem = -1;
 
     machine.saveStartTape();
+    paper.remove();
+    paper = new Raphael(document.getElementById('tmCanvas'), winSize[0], winSize[1]);
     var build = buildAnimationQueue(machine);
 
     document.getElementById('finalTape').innerHTML = machine.getFinalTape();
@@ -68,19 +69,6 @@ function animate(machine) {
 function buildAnimationQueue(machine) {
     try {
         while(true) {
-        
-            /* begin debug */
-            /*
-            console.log("---");
-            console.log("main current cell:" + machine.currentCell);
-            console.log("current tape symbol:" + machine.inputTape[machine.currentCell]);
-            console.log("current state:" + machine.currentState.stateSymbol);
-            var r = machine.currentState.rules.length;
-            console.log("number of rules: " + r );
-            console.log("---");
-            */
-            /* end debug */
-        
             var d, c;
             var r = tm.currentState.rules[tm.inputTape[tm.currentCell]];
             if(r) { }
@@ -108,25 +96,24 @@ function buildAnimationQueue(machine) {
 }
 
 function animateTape() {
-    var command = animationQueue.shift();
   
+    var command = animationQueue.shift();
+    
     /* Animation queue empty, set semaphore to 0 so that the 
      * animateTape function knows to reset.
      */
     if(command == undefined) {
-        animationSem == 0;
+        animationSem = 0;
     }
 
     /* continue animating */
     if(command != undefined && animationSem == -1) {
-        console.log("evalling: " + command);
+        console.log("animating: " + command);
         eval(command);
     } 
     
     /* Stop animation */
     else if (animationSem == 0) {
-        paper.remove();
-        paper = new Raphael(document.getElementById('tmCanvas'), winSize[0], winSize[1]);
         tapeCells = [];
         tapeChars = [];
         animationQueue = [];
@@ -150,11 +137,12 @@ function shiftTape(direction, sym, index) {
         color: '#FFFFFF',
         fill: '#FFFFFF'
     });
-
+    
     if(direction == "L") {
         for(var i=0; i < inputLength;i++) {
-            if(i+1 == inputLength)
+            if(i+1 == inputLength) {
                 funcVar = animateTapeHead;
+            }
             tapeCells[i].animate({
                 x: tapeCells[i].attrs.x+50,
                 y: tapeCells[i].attrs.y
@@ -167,8 +155,9 @@ function shiftTape(direction, sym, index) {
     }
     else if(direction == "R") {
         for(var i=0; i < inputLength;i++) {
-            if(i+1 == inputLength)
+            if(i+1 == inputLength) {
                 funcVar = animateTapeHead;
+            }
             tapeCells[i].animate({
                 x: tapeCells[i].attrs.x-50,
                 y: tapeCells[i].attrs.y

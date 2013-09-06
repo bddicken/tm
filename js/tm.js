@@ -1,4 +1,7 @@
 
+/**
+ * The Turing machine model
+ */
 function TM() {
 	
     /* An array of characters */
@@ -59,6 +62,9 @@ function TM() {
 
 }
 
+/**
+ * State model
+ */
 function State(stateStm) {
     this.stateSymbol = null;
     this.rules = new Array();
@@ -67,6 +73,9 @@ function State(stateStm) {
     }
 }
 
+/**
+ * Rule model
+ */
 function Rule(d, nState, nSym) {
     this.direction = d;         // 'R' or 'L'
     this.nextState = nState;    // a State name

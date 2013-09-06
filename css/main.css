@@ -5,18 +5,22 @@
 } 
 
 /* Style for all links */
+
 a:link {
     text-decoration: none;
     color: rgb(60, 60, 60);
 }
+
 a:active {
     text-decoration: none;
     color: rgb(60, 60, 60);
 }
+
 a:visited {
     text-decoration: none;
     color: rgb(60, 60, 60);
 }
+
 a:hover {
     text-decoration: none;
     color: rgb(60, 60, 60);
@@ -115,6 +119,7 @@ body {
     font-size:16px;
     background-color:orange;
 }
+
 .button1 {
     border-radius:3px;
     min-width:50px;
@@ -127,11 +132,13 @@ body {
     margin-left:auto;
     margin-right:auto;
 }
+
 #main {
     width:800px;
     margin-left:auto;
     margin-right:auto;
 }
+
 .popup {
     overflow-y:scroll;
     width: 600px;

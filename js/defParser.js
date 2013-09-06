@@ -9,8 +9,6 @@ var tm = new TM();
 
 /**
  * File parsing object which parses a Turing Machine definition
- * 
- * @author Benjamin Dicken (bddicken@gmail.com)
  */
 
 function defParser(parseString) 
@@ -22,7 +20,6 @@ function defParser(parseString)
     this.line = 1;
 
     /**
-     * @description
      * The parseAll function parses the entire string (this.file) line-by-line.
      * This function relies on other function such as determineCommand and
      * getLine in FileParser.
@@ -52,7 +49,6 @@ function defParser(parseString)
     }
 
     /**
-     * @description
      * This function determines the type of command that is passed to it. Once
      * The type is determined, it is executed.  If any command is determined
      * to be syntactically incorrect, this.error is set to true, and the lines
@@ -132,7 +128,6 @@ function defParser(parseString)
     }
 
     /**
-     * @description
      * Gets the next line from the this.file string.
      */
     this.getLine = function() {

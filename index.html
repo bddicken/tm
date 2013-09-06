@@ -46,7 +46,7 @@
             <div class="box" id="finalTape">
                 N/A
             </div>
-            <a align="center" href="#go"><div align="center" class="button1" onclick="parser.file = (document.getElementById('deftextbox').value); parser.parse();">run program</div></a>
+            <a align="center" href="#go"><div align="center" class="button1" onclick="parser.file = (document.getElementById('deftextbox').value); parser.parse();">start/stop</div></a>
         </div>
 
 
@@ -68,12 +68,12 @@
 4 0 0 l 5
 5 0 0 l 5
 5 1 1 l 6
-5 x x x halt
+5 x x r halt
 6 1 1 l 6
 6 x x r 0
 6 0 0 r 0
 
-$INITIAL_TAPE 11110011111
+$INITIAL_TAPE 101
 $INITIAL_STATE 0
         
             </textarea>
@@ -85,7 +85,8 @@ $INITIAL_STATE 0
         Turing Machine Programming info:
         <br/>
         <br/>
-        Syntax: <cur state> <cur sym> <new sym> <dir> <new state>
+        Syntax: &lt;cur state&gt; &lt;cur sym&gt; &lt;new sym&gt; &lt;dir&gt; &lt;new state&gt;
+        <br/>
         <br/>
         '#' starts a comment.
         <br/>
@@ -93,9 +94,11 @@ $INITIAL_STATE 0
         <br/>
         '_' represents the blank (space) symbol.
         <br/>
+        <br/>
         Symbols must be a single non-whitespace character.
         <br/>
         States can be any word, not only numbers.
+        <br/>
         <br/>
         $INITIAL_TAPE is required to be set
         <br/>
