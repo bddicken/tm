@@ -32,7 +32,7 @@ var animationQueue = [];
  * -1 = currently animating
  *
  */
-var animationSem = 1;
+var runSem = 1;
 
 function init() {
     paper = new Raphael(document.getElementById('tmCanvas'), winSize[0], winSize[1]);
@@ -41,20 +41,27 @@ function init() {
 function animate(machine) {
  
     /* If currently animating, stop animation */
-    if(animationSem == -1 || animationSem == 0) {
-        animationSem = 0;
+    if(runSem == -1 || runSem == 0) {
+        runSem = 0;
         return;
     }
 
     /* grab semaphore on animatior and begin animation */
-    animationSem = -1;
+    runSem = -1;
+
+    /* Reset machine */
+    tapeCells = [];
+    tapeChars = [];
+    animationQueue = [];
 
     machine.saveStartTape();
     paper.remove();
     paper = new Raphael(document.getElementById('tmCanvas'), winSize[0], winSize[1]);
     var build = buildAnimationQueue(machine);
+    console.log("hai3");
 
     document.getElementById('finalTape').innerHTML = machine.getFinalTape();
+    console.log("hai4");
     
     if(build) {
         inputLength = machine.inputTape.length;
@@ -90,6 +97,7 @@ function buildAnimationQueue(machine) {
         }
     } catch(err) {
         tmERRPop.flip();
+        runSem = 1;
         return false;
     }
     return true;
@@ -103,17 +111,17 @@ function animateTape() {
      * animateTape function knows to reset.
      */
     if(command == undefined) {
-        animationSem = 0;
+        runSem = 0;
     }
 
     /* continue animating */
-    if(command != undefined && animationSem == -1) {
+    if(command != undefined && runSem == -1) {
         console.log("animating: " + command);
         eval(command);
     } 
     
     /* Stop animation */
-    else if (animationSem == 0) {
+    else if (runSem == 0) {
         tapeCells = [];
         tapeChars = [];
         animationQueue = [];
@@ -121,7 +129,7 @@ function animateTape() {
         tm = new TM();
 
         /* Animation is now cleared. Ready to start a new one. */
-        animationSem = 1;
+        runSem = 1;
     }
 }
    

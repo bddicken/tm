@@ -45,6 +45,7 @@ function defParser(parseString)
 
         } catch(err) {
             parseERRPop.flip();
+            runSem = 1;
         }
     }
 
@@ -58,14 +59,7 @@ function defParser(parseString)
         
         // command is adding a comment
         if(command.indexOf("#") != -1){
-            try {
-                command = command.substring(0, command.indexOf("#"));
-            } catch(err) {
-                this.error = true;
-                console.log('error: ' + err.message);
-                this.errorMessage = this.errorMessage.concat(', ' + this.line);
-                return;
-            }
+            //command = command.substring(0, command.indexOf("#"));
             return;
         }
         
