@@ -10,7 +10,9 @@
     <script src="lib/jquery-1.8.2.min.js"></script>
     <script src="lib/raphael-min.js"></script>
     <script src="js/popup.js"></script>
+    <script src="js/misc.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/animation.js"></script>
     <script src="js/tm.js"></script>
     <script src="js/defParser.js"></script>
 
@@ -49,9 +51,8 @@
             <div class="box" id="finalTape">
                 N/A
             </div>
-            <a align="center" href="#go"><div align="center" class="button1" onclick="parser.file = (document.getElementById('deftextbox').value); parser.parse();">start/stop</div></a>
+            <a align="center" href="#go"><div align="center" class="button1" onclick="startStop();">start/stop</div></a>
         </div>
-
 
         <div id="definition">
             <div class="bar">
