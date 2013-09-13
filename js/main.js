@@ -2,7 +2,7 @@
 window.onload = init;
 
 function init() {
-    // do nothing right now    
+    tmAnim = new TMAnimator(tm);
 }
 
 function startStop() {

@@ -26,7 +26,7 @@ function defParser(parseString)
      */
     this.parse = function() {
 
-        //try {
+        try {
 
             tm = new TM();
             this.file = this.file + '\nFFF\n';
@@ -46,10 +46,10 @@ function defParser(parseString)
             tmAnim = new TMAnimator(tm);
             tmAnim.animate();
 
-        //} catch(err) {
-        //    parseERRPop.flip();
-        //    runSem = 1;
-        //}
+        } catch(err) {
+            parseERRPop.flip();
+            runSem = 1;
+        }
     }
 
     /**

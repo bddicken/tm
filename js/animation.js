@@ -67,7 +67,7 @@ function TMAnimator(m) {
     }
 
     this.buildAnimationQueue = function() {
-        //try {
+        try {
             while(true) {
                 var d, c;
                 var r = this.machine.currentState.rules[this.machine.inputTape[this.machine.currentCell]];
@@ -88,11 +88,11 @@ function TMAnimator(m) {
     
                 this.machine.step();
             }
-        //} catch(err) {
-        //    tmERRPop.flip();
-        //    this.runSem = 1;
-        //    return false;
-       // }
+        } catch(err) {
+            tmERRPop.flip();
+            this.runSem = 1;
+            return false;
+        }
         return true;
     }
 
