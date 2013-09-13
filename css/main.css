@@ -161,6 +161,8 @@ body {
     visibility:hidden;
 }
 
+/* github ribbon */
+
 .ribbon {
     background-color: #a00;
     overflow: hidden;
