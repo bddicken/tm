@@ -1,4 +1,4 @@
-## tm (Turing Machine)
+## Turing Machine
 An animation-based turing machine simulator.
 
 view live at tm.benjamindicken.com
