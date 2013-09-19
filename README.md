@@ -4,5 +4,5 @@ An animation-based turing machine simulator.
 view live at tm.benjamindicken.com
 
 ## ISSUES
-- no major known issues ATM
+- The animation preforms very poorly on large input tapes.
 
