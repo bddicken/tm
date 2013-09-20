@@ -27,7 +27,6 @@ function defParser(parseString)
     this.parse = function() {
 
         try {
-
             tm = new TM();
             this.file = this.file + '\nFFF\n';
             var lines = this.file.split("\n").length;  
@@ -71,7 +70,7 @@ function defParser(parseString)
             var index = command.indexOf('$INITIAL_TAPE');
             var parse = command.substring(index+14).split('');
             for(var x=0; x < parse.length; x++)
-                tm.inputTape[x] = parse[x];
+                tm.finalTape[x] = parse[x];
             return;
         } 
         

@@ -4,6 +4,10 @@ var HEAD_TIME = 40;
 var WIN_SIZE = [800,120];
 var CELL_SIZE = [50, 50];
 var HEAD_SIZE = [6, 50];
+var MAX_RENDER_CELLS = 20;
+var MIN_RENDER_CELLS_RIGHT = 13;
+var MIN_RENDER_CELLS_LEFT = 6;
+
 
 /* canvas elements */
 var c;
@@ -14,6 +18,9 @@ var tmState;
 var tmAnim;
 
 function TMAnimator(m) {
+
+    this.lastPos = 0;
+    this.realCellIndex = 0;
 
     this.machine = m;
     this.animationQueue = [];
@@ -50,38 +57,31 @@ function TMAnimator(m) {
         tapeChars = [];
         animationQueue = [];
 
-        this.machine.saveStartTape();
+        this.machine.save();
         this.paper.remove();
         this.paper = new Raphael(document.getElementById('tmCanvas'), WIN_SIZE[0], WIN_SIZE[1]);
-        var build = this.buildAnimationQueue(this.machine);
-
+        var build = this.runMachine(this.machine);
         document.getElementById('finalTape').innerHTML = this.machine.getFinalTape();
-    
+        this.inputLength = this.machine.finalTape.length;
+        
         if(build) {
-            this.inputLength = this.machine.inputTape.length;
+            this.machine.reset();
             this.drawCells(this.machine);
-            this.tapeHead = this.paper.rect(175, 15, HEAD_SIZE[0], HEAD_SIZE[1]);
+            this.tapeHead = this.paper.rect(222, 15, HEAD_SIZE[0], HEAD_SIZE[1]);
             this.tapeHead.attr({ color: '#000000' });
-            this.animateTape();
+            this.runAnimation();
         }
     }
-
-    this.buildAnimationQueue = function() {
+    
+    this.runMachine = function() {
         try {
             while(true) {
-                var d, c;
-                var r = this.machine.currentState.rules[this.machine.inputTape[this.machine.currentCell]];
+                var r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
                 if(r) { }
                 else {
                     this.machine.appendSpace();
-                    r = this.machine.currentState.rules[this.machine.inputTape[this.machine.currentCell]];
+                    r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
                 }
-                
-                c = r.newSymbol;
-                d = r.direction;
-
-                var animCall = new AnimationStep(d.toUpperCase(), c, this.machine.currentCell);
-                this.animationQueue.push(animCall);
 
                 if(r.nextState == 'halt')
                     break;
@@ -96,21 +96,37 @@ function TMAnimator(m) {
         return true;
     }
 
+    this.runAnimation = function() {
+                
+        var d, c;
+        var r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
+        if(!r) {
+            this.machine.appendSpace();
+            r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
+        }
+                
+        c = r.newSymbol;
+        d = r.direction;
+
+        var animCall = new AnimationStep(d.toUpperCase(), c, this.machine.currentCell);
+        this.animationQueue.push(animCall);
+
+        if(r.nextState == 'halt')
+            return;
+                
+        this.lastPos = this.machine.currentCell;
+        this.machine.step();
+                
+        /* one animation step at a time */
+        this.animateTape();
+    }
+
     this.animateTape = function() {
   
-        var command = this.animationQueue.shift();
-    
-        /* Animation queue empty, set semaphore to 0 so that the 
-         * animateTape function knows to reset.
-         */
-        if(command == undefined) {
-            this.runSem = 0;
-        }
 
         /* continue animating */
-        if(command != undefined && this.runSem == -1) {
-            //console.log("animating: " + command);
-            this.shiftTape(command.direction, command.symbol, command.index);
+        if(this.runSem == -1) {
+            this.animateTapeHead();
         } 
     
         /* Stop animation */
@@ -130,23 +146,62 @@ function TMAnimator(m) {
         this.paper.remove();
     }
    
-    this.shiftTape = function (direction, sym, index) {
+    this.shiftTape = function () {
+        
+        var command = this.animationQueue.shift();
+        var sym = command.symbol;
+        var direction = command.direction;
+        
+        /* Animation queue empty, set semaphore to 0 so that the 
+         * animateTape function knows to reset.
+         */
+        if(command == undefined) {
+            this.runSem = 0;
+        }
+        
         var funcVar = function(){};
+        
+        //console.log("---");
+        //console.log("real cell update: " + newCharIndex);
+        //console.log("logical cell update: " + this.machine.currentCell);
+        //console.log("this.realCellIndex: " + this.realCellIndex);
+        //console.log("---\n");
+        
+        var shiftRealCells = (
+            this.machine.currentCell >= MIN_RENDER_CELLS_LEFT+1
+            && (this.inputLength - (this.machine.currentCell+1)) >= MIN_RENDER_CELLS_RIGHT
+            && this.inputLength >= MAX_RENDER_CELLS
+        );
    
-        /* New symbol on tape */
-        var tempChar = this.paper.text(this.tapeChars[index].attrs.x, this.tapeChars[index].attrs.y, sym);
-        this.tapeChars[index].remove();
-        this.tapeChars[index] = tempChar;
-        this.tapeChars[index].attr({
-            'font-size': '20px',
-            color: '#FFFFFF',
-            fill: '#FFFFFF'
-        });
-    
         if(direction == "L") {
-            for(var i=0; i < this.inputLength;i++) {
-                if(i+1 == this.inputLength) {
-                    funcVar = this.animateTapeHead.bind(this);
+            /* Dynamicall change tape */
+            if(shiftRealCells) {
+
+                /* Add new cell */
+                var newCell = this.tapeCells.pop();
+                newCell.attrs.x = this.tapeCells[0].attrs.x-50;
+                this.tapeCells.unshift(newCell);
+
+                /* Add new char */
+                this.tapeChars.pop().remove();
+                var newChar = this.paper.text(
+                    this.tapeChars[0].attrs.x-50, 
+                    this.tapeChars[0].attrs.y, 
+                    this.machine.finalTape[this.machine.currentCell-7]
+                );
+                newChar.attr({
+                    'font-size': '20px',
+                    color: '#FFFFFF',
+                    fill: '#FFFFFF'
+                });
+                this.tapeChars.unshift(newChar);
+               
+            } else {
+                this.realCellIndex--;
+            }
+            for(var i=0; i < this.cellCount;i++) {
+                if(i+1 == this.cellCount) {
+                    funcVar = this.runAnimation.bind(this);
                 }
                 this.tapeCells[i].animate({
                     x: this.tapeCells[i].attrs.x+50,
@@ -159,9 +214,35 @@ function TMAnimator(m) {
             }
         }
         else if(direction == "R") {
-            for(var i=0; i < this.inputLength;i++) {
-                if(i+1 == this.inputLength) {
-                    funcVar = this.animateTapeHead.bind(this);
+            /* Dynamicall change tape */
+            if(shiftRealCells) {
+                
+                /* Add new cell */
+                var newCell = this.tapeCells.shift();
+                newCell.attrs.x = this.tapeCells[this.cellCount-2].attrs.x+50;
+                this.tapeCells.push(newCell);
+
+                /* Add new char */
+                this.tapeChars.shift().remove();
+                var newChar = this.paper.text(
+                    this.tapeChars[this.cellCount-2].attrs.x+50, 
+                    this.tapeChars[this.cellCount-2].attrs.y, 
+                    this.machine.finalTape[this.machine.currentCell+13]
+                );
+                newChar.attr({
+                    'font-size': '20px',
+                    color: '#FFFFFF',
+                    fill: '#FFFFFF'
+                });
+                this.tapeChars.push(newChar);
+                
+            } else {
+                this.realCellIndex++;
+            }
+
+            for(var i=0; i < this.cellCount;i++) {
+                if(i+1 == this.cellCount) {
+                    funcVar = this.runAnimation.bind(this);
                 }
                 this.tapeCells[i].animate({
                     x: this.tapeCells[i].attrs.x-50,
@@ -175,22 +256,26 @@ function TMAnimator(m) {
         }
     }
 
+    this.cellCount = 0;
+
     /**
      * Draw the cells of the model machine.
      */
     this.drawCells = function() {
-    
-        for(var i=0; i < this.machine.startTape.length; i++) {
+   
+        this.cellCount = Math.min(MAX_RENDER_CELLS, this.machine.startTape.length);
+
+        for(var i=0; i < this.cellCount; i++) {
 
             /* Create a cell */
-            this.tapeCells[i] = this.paper.rect(150+i*(CELL_SIZE[0]), 50, CELL_SIZE[0], CELL_SIZE[0]);
+            this.tapeCells[i] = this.paper.rect(200+i*(CELL_SIZE[0]), 50, CELL_SIZE[0], CELL_SIZE[0]);
             this.tapeCells[i].attr({
                 stroke: '#ffaf4f',
                 fill: 'grey'
             });
 
             /* Set the character on the cell */
-            this.tapeChars[i] = this.paper.text(150+i*(CELL_SIZE[0])+25, 50+25, this.machine.startTape[i]);
+            this.tapeChars[i] = this.paper.text(200+i*(CELL_SIZE[0])+25, 50+25, this.machine.startTape[i]);
             this.tapeChars[i].attr({
                 'font-size': '20px',
                 color: '#FFFFFF',
@@ -199,24 +284,34 @@ function TMAnimator(m) {
         }
     }
 
+    this.changeChar = function () {
+        var tempChar = this.paper.text(this.tapeChars[this.realCellIndex].attrs.x, this.tapeChars[this.realCellIndex].attrs.y, this.animationQueue[0].symbol);
+        this.tapeChars[this.realCellIndex].remove();
+        this.tapeChars[this.realCellIndex]=tempChar;
+        this.tapeChars[this.realCellIndex].attr({
+            'font-size': '20px',
+            color: 'blue',
+            fill: '#ffffff'
+        });
+
+        this.tapeHeadUp();
+    }
+
     this.tapeHeadUp = function() {
         this.tapeHead.animate({
             x: this.tapeHead.attrs.x,
             y: this.tapeHead.attrs.y-15
-        }, HEAD_TIME, '<>', this.animateTape.bind(this) );
+        }, HEAD_TIME, '<>', this.shiftTape.bind(this));
     }
 
     this.tapeHeadDown = function() {
         this.tapeHead.animate({
             x: this.tapeHead.attrs.x,
             y: this.tapeHead.attrs.y+15
-        }, HEAD_TIME, '<>', this.tapeHeadUp.bind(this) );
+        }, HEAD_TIME, '<>', this.changeChar.bind(this) );
     }
 
     this.animateTapeHead = function() {
-        console.log(this.inputLength);
-        //var funcV = this.tapeHeadDown;
-        //funcV();
         this.tapeHeadDown();
     }
 

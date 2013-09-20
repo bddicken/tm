@@ -5,11 +5,14 @@
 function TM() {
 	
     /* An array of characters */
-    this.inputTape = new Array();
+    this.finalTape = new Array();
     this.startTape = new Array();
 
     this.currentCell = 0;
-    this.currentState = null;
+    this.currentState = new State(null, null, null);
+    
+    this.startCell = 0;
+    this.startState = new State(null, null, null);
 
     /* An array of states */
     this.states = new Array();
@@ -20,7 +23,7 @@ function TM() {
 
     this.getFinalTape = function() {
         try {
-            return tm.inputTape.toString().replace(/,/g, "");
+            return tm.finalTape.toString().replace(/,/g, "");
         } catch(err) {
             return "N/A";
         }
@@ -32,10 +35,10 @@ function TM() {
 
     this.step = function() {
 
-        var cr = this.currentState.rules[this.inputTape[this.currentCell]];
+        var cr = this.currentState.rules[this.finalTape[this.currentCell]];
 
         /* Update current character */
-        this.inputTape[this.currentCell] = cr.newSymbol;
+        this.finalTape[this.currentCell] = cr.newSymbol;
 
         /* Move tape head */
         if(cr.direction == 'r')
@@ -51,12 +54,20 @@ function TM() {
         
     }
 
-    this.saveStartTape = function() {
-        this.startTape = clone(this.inputTape);
+    this.save = function() {
+        this.startTape = clone(this.finalTape);
+        this.startCell = clone(this.currentCell);
+        this.startState = clone(this.currentState);
+    }
+
+    this.reset = function () {
+        this.finalTape = clone(this.startTape);
+        this.currentCell = clone(this.startCell);
+        this.currentState = clone(this.startState);
     }
 
     this.appendSpace = function() {
-        this.inputTape.push('_');
+        this.finalTape.push('_');
         this.startTape.push('_');
     }
 
