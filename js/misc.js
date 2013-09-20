@@ -1,18 +1,6 @@
 /**
  * clone an object
  */
-/*
-function clone(obj){
-    if(obj == null || typeof(obj) != 'object')
-        return obj;
-    var temp = obj.constructor(); 
-    for(var key in obj)
-        temp[key] = clone(obj[key]);
-    return temp;
-}
-*/
-
-
 function clone(obj) {
     // Handle the 3 simple types, and null or undefined
     if (null == obj || "object" != typeof obj) return obj;
