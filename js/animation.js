@@ -111,8 +111,10 @@ function TMAnimator(m) {
         var animCall = new AnimationStep(d.toUpperCase(), c, this.machine.currentCell);
         this.animationQueue.push(animCall);
 
-        if(r.nextState == 'halt')
+        if(r.nextState == 'halt') {
+            this.runSem = 1;
             return;
+        }
                 
         this.lastPos = this.machine.currentCell;
         this.machine.step();
@@ -160,12 +162,6 @@ function TMAnimator(m) {
         }
         
         var funcVar = function(){};
-        
-        //console.log("---");
-        //console.log("real cell update: " + newCharIndex);
-        //console.log("logical cell update: " + this.machine.currentCell);
-        //console.log("this.realCellIndex: " + this.realCellIndex);
-        //console.log("---\n");
         
         var shiftRealCells = (
             this.machine.currentCell >= MIN_RENDER_CELLS_LEFT+1
