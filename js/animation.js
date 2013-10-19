@@ -74,35 +74,40 @@ function TMAnimator(m) {
     }
     
     this.runMachine = function() {
-        try {
+        //try {
             while(true) {
-                var r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
+                //var r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
+                var r = this.machine.getCurrentRules();
                 if(r) { }
                 else {
                     this.machine.appendSpace();
-                    r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
+                    //r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
+                    r = this.machine.getCurrentRules();
                 }
 
+                console.log("r: " + r);
                 if(r.nextState == 'halt')
                     break;
     
                 this.machine.step();
             }
-        } catch(err) {
-            tmERRPop.flip();
-            this.runSem = 1;
-            return false;
-        }
+        //} catch(err) {
+        //    tmERRPop.flip();
+        //    this.runSem = 1;
+        //    return false;
+        //}
         return true;
     }
 
     this.runAnimation = function() {
                 
         var d, c;
-        var r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
+        //var r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
+        var r = this.machine.getCurrentRules();
         if(!r) {
             this.machine.appendSpace();
-            r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
+            //r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
+            r = this.machine.getCurrentRules();
         }
                 
         c = r.newSymbol;
@@ -111,6 +116,7 @@ function TMAnimator(m) {
         var animCall = new AnimationStep(d.toUpperCase(), c, this.machine.currentCell);
         this.animationQueue.push(animCall);
 
+        console.log("runAnim");
         if(r.nextState == 'halt') {
             this.runSem = 1;
             return;

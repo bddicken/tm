@@ -26,7 +26,7 @@ function defParser(parseString)
      */
     this.parse = function() {
 
-        try {
+        //try {
             tm = new TM();
             this.file = this.file + '\nFFF\n';
             var lines = this.file.split("\n").length;  
@@ -45,10 +45,10 @@ function defParser(parseString)
             tmAnim = new TMAnimator(tm);
             tmAnim.animate();
 
-        } catch(err) {
-            parseERRPop.flip();
-            runSem = 1;
-        }
+        //} catch(err) {
+        //    parseERRPop.flip();
+        //    runSem = 1;
+        //}
     }
 
     /**
@@ -69,8 +69,13 @@ function defParser(parseString)
         if(command.indexOf("$INITIAL_TAPE") != -1){
             var index = command.indexOf('$INITIAL_TAPE');
             var parse = command.substring(index+14).split('');
-            for(var x=0; x < parse.length; x++)
+            console.log("input tape: '" + parse + "'");
+            for(var x=0; x < parse.length; x++) {
+                if(parse[x] == ' ')
+                    parse[x] = '_';
                 tm.finalTape[x] = parse[x];
+            }
+            console.log("input tape: '" + parse + "'");
             return;
         } 
         
@@ -107,6 +112,7 @@ function defParser(parseString)
                 var tR = new Rule();
                 tR.direction = parse[3];
                 tR.nextState = parse[4];
+                console.log("nS:" + parse[4]); 
                 tR.newSymbol = parse[2];
               
                 var tS;
@@ -116,7 +122,7 @@ function defParser(parseString)
                 else {
                     tS = tm.getState(parse[0]);
                 }
-                
+                console.log("ss:" + parse[1]); 
                 tS.addRule(parse[1], tR);
                 tS.stateSymbol = parse[0];
                 tm.addState(tS);

@@ -21,6 +21,18 @@ function TM() {
         this.states[s.stateSymbol] = s;
     }
 
+    this.getCurrentRules = function() {
+        console.log('pre');
+        var cr = this.currentState.rules[this.finalTape[this.currentCell]];
+        if (cr == undefined) {
+            if (this.currentState.rules['*'] != undefined) {
+                console.log('*star*');
+                cr = this.currentState.rules['*'];
+            }
+        }
+        return cr;
+    }
+
     this.getFinalTape = function() {
         try {
             return tm.finalTape.toString().replace(/,/g, "");
@@ -35,7 +47,14 @@ function TM() {
 
     this.step = function() {
 
+        console.log('pre');
         var cr = this.currentState.rules[this.finalTape[this.currentCell]];
+        if (cr == undefined) {
+            if (this.currentState.rules['*']!= undefined) {
+                console.log('*star*');
+                cr = this.currentState.rules['*'];
+            }
+        }
 
         /* Update current character */
         this.finalTape[this.currentCell] = cr.newSymbol;
