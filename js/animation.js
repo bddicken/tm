@@ -14,6 +14,7 @@ var c;
 var ctx;
 var animationHasStarted = false;
 var tmState;
+var timeout;
 
 var tmAnim;
 
@@ -41,7 +42,14 @@ function TMAnimator(m) {
      */
     this.runSem = 1;
 
+    this.stopAnimation  = function () {
+        this.runSem = 0;
+    }
+
     this.animate = function () {
+
+        /* Set timeout for pre-simulation */
+        timeout = setTimeout(this.stopAnimation.bind(this), 100); 
             
         /* If currently animating, stop animation */
         if(this.runSem == -1 || this.runSem == 0) {
@@ -63,7 +71,11 @@ function TMAnimator(m) {
         var build = this.runMachine(this.machine);
         document.getElementById('finalTape').innerHTML = this.machine.getFinalTape();
         this.inputLength = this.machine.finalTape.length;
-        
+      
+        /* Turn off timeout if we made it this far */
+        window.clearTimeout(timeout);
+        this.runSem = -1;
+
         if(build) {
             this.machine.reset();
             this.drawCells(this.machine);
@@ -72,10 +84,18 @@ function TMAnimator(m) {
             this.runAnimation();
         }
     }
+   
+    this.maxIters = 500.0;
     
     this.runMachine = function() {
-        //try {
+        try {
             while(true) {
+                if (this.maxIters <= 0) {
+                    this.maxIters = 500.0;
+                    alert("too many iters");
+                    break;
+                }
+                this.maxIters--;
                 //var r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
                 var r = this.machine.getCurrentRules();
                 if(r) { }
@@ -91,11 +111,11 @@ function TMAnimator(m) {
     
                 this.machine.step();
             }
-        //} catch(err) {
-        //    tmERRPop.flip();
-        //    this.runSem = 1;
-        //    return false;
-        //}
+        } catch(err) {
+            tmERRPop.flip();
+            this.runSem = 1;
+            return false;
+        }
         return true;
     }
 

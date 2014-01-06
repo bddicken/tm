@@ -16,6 +16,8 @@ function TM() {
 
     /* An array of states */
     this.states = new Array();
+    
+    this.maxIters = 100000000.0;
 
     this.addState = function(s) {
         this.states[s.stateSymbol] = s;
