@@ -85,37 +85,39 @@ function TMAnimator(m) {
         }
     }
    
-    this.maxIters = 500.0;
+    this.maxIters = 200.0;
     
     this.runMachine = function() {
-        try {
+        //try {
             while(true) {
+                console.log("machine iteration tape:");
+                console.log("    " + this.machine.finalTape + "\n");
+
                 if (this.maxIters <= 0) {
-                    this.maxIters = 500.0;
+                    this.maxIters = 200.0;
                     alert("too many iters");
-                    break;
+                    return false;
                 }
+
                 this.maxIters--;
-                //var r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
+
                 var r = this.machine.getCurrentRules();
                 if(r) { }
                 else {
                     this.machine.appendSpace();
-                    //r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
                     r = this.machine.getCurrentRules();
                 }
 
-                console.log("r: " + r);
                 if(r.nextState == 'halt')
                     break;
     
                 this.machine.step();
             }
-        } catch(err) {
-            tmERRPop.flip();
-            this.runSem = 1;
-            return false;
-        }
+        //} catch(err) {
+        //    tmERRPop.flip();
+        //    this.runSem = 1;
+        //    return false;
+        //}
         return true;
     }
 

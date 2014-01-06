@@ -24,11 +24,10 @@ function TM() {
     }
 
     this.getCurrentRules = function() {
-        console.log('pre');
         var cr = this.currentState.rules[this.finalTape[this.currentCell]];
         if (cr == undefined) {
             if (this.currentState.rules['*'] != undefined) {
-                console.log('*star*');
+                //console.log('*star*');
                 cr = this.currentState.rules['*'];
             }
         }
@@ -49,23 +48,33 @@ function TM() {
 
     this.step = function() {
 
-        console.log('pre');
+        console.log("    symbol: " + this.finalTape[this.currentCell]);
         var cr = this.currentState.rules[this.finalTape[this.currentCell]];
         if (cr == undefined) {
-            if (this.currentState.rules['*']!= undefined) {
-                console.log('*star*');
+            if (this.currentState.rules['*'] != undefined) {
+                console.log('    *star*');
                 cr = this.currentState.rules['*'];
-            }
+            } 
+        } else {
+            /* Update current character */
+            this.finalTape[this.currentCell] = cr.newSymbol;
         }
 
-        /* Update current character */
-        this.finalTape[this.currentCell] = cr.newSymbol;
+        console.log("    cr sy: " + cr.newSymbol + " d: " + cr.direction + " st: " + cr.nextState);
 
         /* Move tape head */
-        if(cr.direction == 'r')
+        if(cr.direction == 'r') {
             ++this.currentCell;
-        else if (this.currentCell > 0)
+        } else if(cr.direction == '*') {
+            /* No direction change */
+        } else if (this.currentCell > 0) {
             --this.currentCell;
+        }
+
+        /* Add space if needed */
+        if (this.finalTape[this.currentCell] == undefined) {
+            this.appendSpace();
+        }
 
         /* Change state */
         this.currentState = this.states[cr.nextState];
