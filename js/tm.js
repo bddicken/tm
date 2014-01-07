@@ -24,10 +24,13 @@ function TM() {
     }
 
     this.getCurrentRules = function() {
+        console.log("cell: " + this.currentCell);
+        console.log("cell char: " + this.finalTape[this.currentCell]);
         var cr = this.currentState.rules[this.finalTape[this.currentCell]];
         if (cr == undefined) {
+            console.log('*undefined*');
             if (this.currentState.rules['*'] != undefined) {
-                //console.log('*star*');
+                console.log('*star*');
                 cr = this.currentState.rules['*'];
             }
         }
@@ -49,10 +52,10 @@ function TM() {
     this.step = function() {
 
         console.log("    symbol: " + this.finalTape[this.currentCell]);
+
         var cr = this.currentState.rules[this.finalTape[this.currentCell]];
         if (cr == undefined) {
             if (this.currentState.rules['*'] != undefined) {
-                console.log('    *star*');
                 cr = this.currentState.rules['*'];
             } 
         } else {
@@ -67,8 +70,12 @@ function TM() {
             ++this.currentCell;
         } else if(cr.direction == '*') {
             /* No direction change */
-        } else if (this.currentCell > 0) {
-            --this.currentCell;
+        } else if (cr.direction == 'l') {
+            if (this.currentCell > 0) {
+                --this.currentCell;
+            } else {
+                this.prependSpace();
+            }
         }
 
         /* Add space if needed */
@@ -101,6 +108,12 @@ function TM() {
         this.startTape.push('_');
     }
 
+    this.prependSpace = function() {
+        console.log("prepend!");
+        this.finalTape.unshift('_');
+        this.startTape.unshift('_');
+        this.startCell++;
+    }
 }
 
 /**

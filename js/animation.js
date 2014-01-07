@@ -8,7 +8,6 @@ var MAX_RENDER_CELLS = 20;
 var MIN_RENDER_CELLS_RIGHT = 13;
 var MIN_RENDER_CELLS_LEFT = 6;
 
-
 /* canvas elements */
 var c;
 var ctx;
@@ -64,11 +63,12 @@ function TMAnimator(m) {
         tapeCells = [];
         tapeChars = [];
         animationQueue = [];
-
         this.machine.save();
         this.paper.remove();
         this.paper = new Raphael(document.getElementById('tmCanvas'), WIN_SIZE[0], WIN_SIZE[1]);
+
         var build = this.runMachine(this.machine);
+
         document.getElementById('finalTape').innerHTML = this.machine.getFinalTape();
         this.inputLength = this.machine.finalTape.length;
       
@@ -81,6 +81,7 @@ function TMAnimator(m) {
             this.drawCells(this.machine);
             this.tapeHead = this.paper.rect(222, 15, HEAD_SIZE[0], HEAD_SIZE[1]);
             this.tapeHead.attr({ color: '#000000' });
+            console.log("begin animation");
             this.runAnimation();
         }
     }
@@ -122,13 +123,12 @@ function TMAnimator(m) {
     }
 
     this.runAnimation = function() {
+        console.log("    " + this.machine.finalTape + "\n");
                 
         var d, c;
-        //var r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
         var r = this.machine.getCurrentRules();
         if(!r) {
             this.machine.appendSpace();
-            //r = this.machine.currentState.rules[this.machine.finalTape[this.machine.currentCell]];
             r = this.machine.getCurrentRules();
         }
                 
@@ -138,7 +138,6 @@ function TMAnimator(m) {
         var animCall = new AnimationStep(d.toUpperCase(), c, this.machine.currentCell);
         this.animationQueue.push(animCall);
 
-        console.log("runAnim");
         if(r.nextState == 'halt') {
             this.runSem = 1;
             return;
@@ -152,7 +151,6 @@ function TMAnimator(m) {
     }
 
     this.animateTape = function() {
-  
 
         /* continue animating */
         if(this.runSem == -1) {
@@ -198,7 +196,7 @@ function TMAnimator(m) {
         );
    
         if(direction == "L") {
-            /* Dynamicall change tape */
+            /* Dynamically change tape */
             if(shiftRealCells) {
 
                 /* Add new cell */
@@ -341,7 +339,6 @@ function TMAnimator(m) {
 
 } /* End TMAnimator */
 
-
 /** 
  * 1 Step of animation.
  */
@@ -350,3 +347,4 @@ function AnimationStep(d, s, i) {
     this.symbol = s;
     this.index = i;
 }
+
