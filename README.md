@@ -5,5 +5,5 @@ view live at tm.benjamindicken.com
 
 ## ISSUES
 - Clean up TMAnimator code
-- Nothingelse that I know of
+- Animation is broken when cells are prepended
 

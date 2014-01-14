@@ -63,12 +63,15 @@ function TMAnimator(m) {
         tapeCells = [];
         tapeChars = [];
         animationQueue = [];
+
+        this.machine.save();
+        this.machine.reset();
         this.machine.save();
         this.paper.remove();
         this.paper = new Raphael(document.getElementById('tmCanvas'), WIN_SIZE[0], WIN_SIZE[1]);
 
         var build = this.runMachine(this.machine);
-
+        
         document.getElementById('finalTape').innerHTML = this.machine.getFinalTape();
         this.inputLength = this.machine.finalTape.length;
       
@@ -81,7 +84,7 @@ function TMAnimator(m) {
             this.drawCells(this.machine);
             this.tapeHead = this.paper.rect(222, 15, HEAD_SIZE[0], HEAD_SIZE[1]);
             this.tapeHead.attr({ color: '#000000' });
-            console.log("begin animation");
+            console.log(">>>>> begin animation <<<<<");
             this.runAnimation();
         }
     }

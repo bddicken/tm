@@ -24,8 +24,9 @@ function TM() {
     }
 
     this.getCurrentRules = function() {
-        console.log("cell: " + this.currentCell);
-        console.log("cell char: " + this.finalTape[this.currentCell]);
+        //console.log("cell: " + this.currentCell);
+        //console.log("cell char: " + this.finalTape[this.currentCell]);
+        //console.log("curr state rule count: " + Object.keys(this.currentState.rules).length);
         var cr = this.currentState.rules[this.finalTape[this.currentCell]];
         if (cr == undefined) {
             console.log('*undefined*');
@@ -50,8 +51,6 @@ function TM() {
     }
 
     this.step = function() {
-
-        console.log("    symbol: " + this.finalTape[this.currentCell]);
 
         var cr = this.currentState.rules[this.finalTape[this.currentCell]];
         if (cr == undefined) {
@@ -92,15 +91,15 @@ function TM() {
     }
 
     this.save = function() {
-        this.startTape = clone(this.finalTape);
-        this.startCell = clone(this.currentCell);
-        this.startState = clone(this.currentState);
+        this.startTape = JSON.parse(JSON.stringify(this.finalTape));
+        this.startCell = this.currentCell;
+        this.startState = jQuery.extend(true, {}, this.currentState);
     }
 
     this.reset = function () {
-        this.finalTape = clone(this.startTape);
-        this.currentCell = clone(this.startCell);
-        this.currentState = clone(this.startState);
+        this.finalTape = JSON.parse(JSON.stringify(this.startTape));
+        this.currentCell = this.startCell;
+        this.currentState = jQuery.extend(true, {}, this.startState);
     }
 
     this.appendSpace = function() {
